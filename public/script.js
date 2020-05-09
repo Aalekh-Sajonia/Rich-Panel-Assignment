@@ -3,6 +3,13 @@ const selection = document.querySelector("#selection");
 const replyTweet = document.querySelector('#replyTweet');
 const replyField = document.querySelector('#replyText');
 const iconLoader = document.querySelector('#iconLoader');
+let url;
+if(location.protocol === 'https:'){
+  url = 'https://warm-bastion-55542.herokuapp.com/';
+
+} else {
+  url = 'http://warm-bastion-55542.herokuapp.com/';
+}
 
 let socketInsetTweet = (data) => {
   const text = `  <div id=${data.id_str} class="card mb-3" style="max-width: 450px; max-height: 450px; background-color: #74C2E1;" onclick="clicked(this.id)" >
@@ -115,7 +122,7 @@ let test = async () => {
     name: selectedTweet.data.user.screen_name
   }
   replyField.value = '';
-  const result = await fetch(`http://localhost:3000/reply`, {
+  const result = await fetch(url+'reply', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
@@ -149,7 +156,7 @@ let loadTweet = async (id) => {
   let data = {
     id: id
   }
-  const result = await fetch(`http://localhost:3000/tweet?id=${id}`, {
+  const result = await fetch(`${url}tweet?id=${id}`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json'
@@ -201,7 +208,7 @@ const renderList = (items) => {
 
 let load = async () => {
   loader();
-  let result = await fetch('http://localhost:3000/tweets');
+  let result = await fetch(url+'tweets');
   let res = await result.json();
 
   console.log(res.statuses);
