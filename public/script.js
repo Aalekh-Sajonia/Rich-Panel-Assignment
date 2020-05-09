@@ -5,10 +5,10 @@ const replyField = document.querySelector('#replyText');
 const iconLoader = document.querySelector('#iconLoader');
 let url;
 if(location.protocol === 'https:'){
-  url = 'https://warm-bastion-55542.herokuapp.com/';
+  url = 'https://localhost:3000/';
 
 } else {
-  url = 'http://warm-bastion-55542.herokuapp.com/';
+  url = 'http://localhost:3000/';
 }
 
 let socketInsetTweet = (data) => {
