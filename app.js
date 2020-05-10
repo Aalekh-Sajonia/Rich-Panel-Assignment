@@ -18,12 +18,12 @@ var app = express();
 let server = http.createServer(app);
 let io = socketIO(server);
 io.on('connection', (socket) => {
-  console.log(socket.id);
+  // console.log(socket.id);
   socket.on('recievedUser', (data) => {
-    console.log(data);
+    // console.log(data);
     socketList[data.user] = socket.id; //just in case storing the socket ID to user ID
-    console.log(socketList);
-    console.log(T);
+    // console.log(socketList);
+    console.log(T[data.user]);
     var stream = T[data.user].stream('statuses/filter', { track: '@' + data.user });
     stream.on('tweet',  (tweet) => {
       console.log(tweet);
@@ -73,12 +73,15 @@ let searchTweets = async (user) => {
   return result;
 }
 
+let pro = {} ;
+
 passport.use(new Strategy({
   consumerKey: 'u5h3Mu4EVEOeatsJCdkAWb2ip',
   consumerSecret: 'tnRS7uqqV94EiyJOisxG9lnMYXOL5DzdysuhSsY7p69I6HVKGE',
-  callbackURL: 'https://warm-bastion-55542.herokuapp.com'
+  callbackURL: 'http://localhost:3000'
 }, (token,tokenSecret,profile,callback) => {
-  // console.log(profile.username);
+  pro[profile.username] = profile;
+  // console.log(profile);
   T[profile.username] = new Twit({
       consumer_key: 'u5h3Mu4EVEOeatsJCdkAWb2ip'
     , consumer_secret: 'tnRS7uqqV94EiyJOisxG9lnMYXOL5DzdysuhSsY7p69I6HVKGE'
@@ -86,7 +89,7 @@ passport.use(new Strategy({
     , access_token_secret: tokenSecret
   });
 
-  console.log(T);
+  // console.log(T);
   return callback(null,profile);
 }));
 
@@ -171,6 +174,10 @@ app.post('/reply', async (req,res) => {
     }
     res.send(data);
   });
+});
+
+app.get('/getuser', async(req,res) => {
+  res.send(pro[req.user.username]);
 });
 
 let port = process.env.PORT;

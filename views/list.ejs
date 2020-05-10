@@ -1,33 +1,177 @@
 <%- include("header") -%>
-<div id="parent">
+<div class="sidenav">
+  <div class="sidenav-top">
+  	<i class="fa-2x fa fa-diamond" aria-hidden="true"></i>
+  </div>
+  <div class="sidenav-mid">
+  	<i class="fa-2x fa fa-clock-o" aria-hidden="true"></i>
+  	<i class="fa-2x fa fa-home" aria-hidden="true"></i>
+  	<i class="fa-2x fa fa-users" aria-hidden="true"></i>
+  	<div style="background-color: #e8e7e4;"><i class="fa-2x fa fa-comments" aria-hidden="true"></i></div>
+  	<i class="fa-2x fa fa-credit-card" aria-hidden="true"></i>
+  	<i class="fa-2x fa fa-address-card" aria-hidden="true"></i>
+  </div>
+  <div class="sidenav-bot">
+  	<i class="fa-2x fa fa-cog" aria-hidden="true"></i>
+    <div class="panel-img">
+      <img style="width: 30px; height: 30px;" src="https://images.unsplash.com/photo-1503023345310-bd7c1de61c7d?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&w=1000&q=80" class="card-img" alt="..." />
+    </div>
+  </div>
+</div>
+<div id="parent" class="main">
   <div class="box" id="heading">
     <h1>Tweets</h1>
   </div>
   <div class="row">
     <div id="tweets" class = "column left">
+    	<div class="card mb-3" style="max-width: 450px; max-height: 450px; " onclick="clicked(this.id)" >
+	      <div class="row no-gutters">
+	        <div class="col-md-4">
+	          <img style="padding: 20px;" src="https://images.unsplash.com/photo-1503023345310-bd7c1de61c7d?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&w=1000&q=80" class="card-img" alt="...">
+	        </div>
+	        <div class="col-md-8">
+	          <div class="card-body">
+	            <h5 class="card-title">Aalekh</h5>
+	            <p class="card-text">Aalekh</p>
+	            <p class="card-text"><small>2020</small></p>
+	          </div>
+	        </div>
+	      </div>
+      </div>
+
+
     </div>
     <div id="selection" class = "column right">
-      <div class="container">
-    <div class="row">
-      <div class="col-lg-5  comment-main rounded">
-        <ul class="p-0">
-          <li id="replyTweet">
+      <div class="container-left column left" >
+	   <div class="chat-top">
+	   	<div class="chat-top-1">
+	   		<table style="width:90%; margin-top: 10px;">
+	   			<tr class = "chat-loader-profile">
+				    <td style="text-align: right; font-weight: 100;"><img style="width: 40px; height: 40px;" src="https://images.unsplash.com/photo-1503023345310-bd7c1de61c7d?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&w=1000&q=80" class="card-img"></td>
+				    <td style="text-align: center; font-weight: 500;">Aalekh Sajonia</td>
+				    <td><span class="dot"></span></td>
+				  </tr>
+	   		</table>
+	   	</div>
+	   	<div class="chat-top-2">
+	   		<p style="margin-top: 20px;">
+	   			Room No: 102
+	   		</p>
+	   	</div>
+	   	<div class="chat-top-3">
+	   		<p style="margin-top: 20px;">
+	   			OCT1 - OCT12
+	   		</p>
+	   	</div>
+	   	<div class="chat-top-4">
+	   		<button class="button" style="font-weight: 500; margin-top: 15px;">Create a task</button>
+	   	</div>
+	   </div>
 
-          </li>
-          <hr>
-          <div class="row">
-            <div class="col-lg-10 col-10">
-              <input type="text" id = "replyText" class="form-control" placeholder="Reply ...">
-            </div>
-            <div class="col-lg-2 col-2 send-icon">
-              <a onclick="test()" target="_blank" id="iconLoader"><i class="fa fa-paper-plane" aria-hidden="true"></i></a>
-            </div>
-          </div>
-        </ul>
-    </div>
-  </div>
+	   <div class="chat-mid">
+	   	<div class="chat">
+	   		<table style="width: 90%; margin-bottom: 20px;">
+	   			<tr>
+	   				<td style="width: 60px;">
+	   					<img style="width: 25px; height: 25px; float: right;" src="https://images.unsplash.com/photo-1503023345310-bd7c1de61c7d?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&w=1000&q=80" class="card-img">
+	   				</td>
+	   				<td style="padding-left: 20px; font-weight: 500;">
+						Aalekh
+	   				</td>
+	   				<td style="float: right; font-weight: 100;">
+	   					2:05 PM
+	   				</td>
+	   			</tr>
+	   			<tr>
+	   				<tr>
+	   					<td>
+	   					</td>
+	   					<td colspan="2" style="padding-left: 20px; font-weight: 500;">
+	   						my name is Aalekh Sajonia
+	   					</td>
+	   				</tr>
+	   			</tr>
+	   			<tr>
+	   				<td>
+	   				</td>
+	   				<td style="padding-left: 20px;">
+	   					<div style="overflow: auto; padding-top: 10px;">
+		   					<img style="width: 100px; height: 100px;" src="https://media-cdn.tripadvisor.com/media/photo-s/12/4e/56/57/standard-hotel-room-layout.jpg" class="message-img">
+		   					<img style="width: 100px; height: 100px;" src="https://pix10.agoda.net/hotelImages/1198373/-1/43cc893c81e31356ac2bb63b0395a849.jpg" class="message-img">
+		   					<img style="width: 100px; height: 100px;" src="https://cdn.cnn.com/cnnnext/dam/assets/140127103345-peninsula-shanghai-deluxe-mock-up.jpg" class="message-img">
+	   					</div>
+	   				</td>
+	   			</tr>
+	   		</table>
+        <!-- take chat from here -->
+        <div class="chat-data">
+          
+        </div>
+	   	</div>
+	   </div>
 
-    </div>
+	   <div class="chat-bottom">
+	   	<div class="chat-bottom-left">
+	   		<img style="width: 25px; height: 25px; float: right;" src="https://images.unsplash.com/photo-1503023345310-bd7c1de61c7d?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&w=1000&q=80" class="card-img">
+	   	</div>
+
+	   	<div class="chat-bottom-right">
+	   		<input id = "reply-text" type="text" name="reply" placeholder="Reply...">
+	   		<i class=" fa-2x fa fa-paperclip" aria-hidden="true"></i>
+          <i onclick="test()" id="icon-loader" class="fa-lg fa fa-paper-plane" aria-hidden="true"></i>
+	   	</div>
+	   </div>
+      </div>
+      <div class="container-right column right" >
+      	<div class="container-top">
+		   	<div class="profile-container">
+		   		<img class="profile-image" src="https://images.unsplash.com/photo-1503023345310-bd7c1de61c7d?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&w=1000&q=80" alt="Smiley face">
+		   		<p class="profile-name">
+			   		Aalekh
+			   	</p>
+			   	<p class="profile-status">
+			   		Online
+			   	</p>
+			   	<button class="button"><i class="fa fa-phone" aria-hidden="true"></i>Call</button>
+			   	<button class="button"><i class="fa fa-envelope" aria-hidden="true"></i>Email</button>
+		   	</div>
+		  	<div style="padding: 20px;">
+		  		<table style="width:100%;">
+				  <tr>
+				    <td style="text-align: left; font-weight: 100;">Room</td>
+				    <td style="text-align: right; font-weight: 500;">102</td>
+				  </tr>
+				  <tr>
+				   <td style="text-align: left; font-weight: 100;">Category</td>
+				    <td style="text-align: right; font-weight: 500;">Standard</td>
+				  </tr>
+				  <tr>
+				    <td style="text-align: left; font-weight: 100;">Country</td>
+				    <td style="text-align: right; font-weight: 500;">Canada</td>
+				  </tr>
+				</table>
+		  	</div>
+	  	</div>
+	  	<div class="container-bottom">
+	  		<p style="">
+	  			Task
+	  		</p>
+	  			<table style="width:100%;">
+				  <tr style="vertical-align: top;">
+				    <td style=""><input type="checkbox"></td>
+				    <td style=""><label for="vehicle1"> Clean up room</label></td>
+				  </tr>
+				  <tr style="vertical-align: top;">
+				   <td style=""><input type="checkbox"></td>
+				    <td style=""><label for="linen"> Change linen and towels when guests are out.</label></td>
+				  </tr>
+				  <tr style="vertical-align: top;">
+				    <td style=""><input type="checkbox"></td>
+				    <td style=""><label for="wine"> Bring complimentary bottle of red wine.</label></td>
+				  </tr>
+				</table>
+	  	</div>
+      </div>
   </div>
 </div>
 <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>

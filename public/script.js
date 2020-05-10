@@ -1,18 +1,29 @@
 const insertTweet = document.querySelector("#tweets");
 const selection = document.querySelector("#selection");
-const replyTweet = document.querySelector('#replyTweet');
-const replyField = document.querySelector('#replyText');
+const replyField = document.querySelector('#reply-text');
 const iconLoader = document.querySelector('#iconLoader');
+const chatBottomLeft = document.querySelector('.chat-bottom-left');
+const panelImage = document.querySelector('.panel-img');
+const planeIcon = document.querySelector('#icon-loader');
+
+//chat loaderSelection
+const leftProfile = document.querySelector('.chat-top-1');
+const rightProfile = document.querySelector('.profile-container');
+const chat = document.querySelector('.chat-data');
+
 let url;
 if(location.protocol === 'https:'){
-  url = 'https://warm-bastion-55542.herokuapp.com/';
+  url = 'https://localhost:3000/';
 
 } else {
-  url = 'http://warm-bastion-55542.herokuapp.com/';
+  url = 'http://localhost:3000/';
 }
 
 let socketInsetTweet = (data) => {
-  const text = `  <div id=${data.id_str} class="card mb-3" style="max-width: 450px; max-height: 450px; background-color: #74C2E1;" onclick="clicked(this.id)" >
+    console.log(data);
+    var date = data.created_at.split(" ");
+    date = date[0] + " " + date[1] + " " + date[2] + " " + date[3];
+    const tweet = `<div id=${data.id_str} class="card mb-3" style="max-width: 450px; max-height: 450px; " onclick="clicked(this.id)">
     <div class="row no-gutters">
       <div class="col-md-4">
         <img style="padding: 20px;" src=${data.user.profile_image_url} class="card-img" alt="...">
@@ -21,100 +32,74 @@ let socketInsetTweet = (data) => {
         <div class="card-body">
           <h5 class="card-title">${data.user.name}</h5>
           <p class="card-text">${data.text}</p>
-          <p class="card-text"><small>${data.created_at}</small></p>
+          <p class="card-text"><small>${date}</small></p>
         </div>
       </div>
     </div>
-    </div>`;
-    insertTweet.insertAdjacentHTML('afterbegin', text);
+  </div>`
+  insertTweet.insertAdjacentHTML('afterbegin', tweet);
 }
 
 let socket = io();
+socket.on("connect", () => {
+  console.log("connected");
+})
 socket.on('newTweet', (data) => {
+  console.log("newtweet got");
   console.log(data);
   socketInsetTweet(data);
 });
 
 let selectedTweet = {} ;
 
-let iconLoaderFun = () => {
-  const text = `<div class="spinner-grow text-primary" role="status">
-                  <span class="sr-only">Loading...</span>
-                </div>`;
-  iconLoader.innerHTML = '';
-  iconLoader.insertAdjacentHTML("beforeend",text);
-}
-
 let iconLoaded = () => {
-  const text = `<i class="fa fa-paper-plane" aria-hidden="true"></i>`;
-  iconLoader.innerHTML = '';
-  iconLoader.insertAdjacentHTML("beforeend",text);
+  planeIcon.classList.remove("fa-paper-plane");
+  planeIcon.classList.add("fa-spinner");
 }
 
-let insertSelection = (data) => {
-  selectedTweet = data;
-  let date = data.data.created_at.split(" ");
-  date = date[3];
-  const text1 = `<div class="row comment-box p-1 pt-3 pr-4">
-        <div class="col-lg-2 col-3 user-img text-center">
-          <img src=${data.data.user.profile_image_url} class="main-cmt-img">
-        </div>
-        <div class="col-lg-10 col-9 user-comment bg-light rounded pb-1">
-             <div class="row">
-                   <div class="col-lg-8 col-6 border-bottom pr-0">
-                      <p class="w-100 p-2 m-0">${data.data.text}</p>
-                   </div>
-                   <div class="col-lg-4 col-6 border-bottom">
-                      <p class="w-100 p-2 m-0"><span class="float-right"><i class="fa fa-clock-o mr-1" aria-hidden="true"></i>${date}</span></p>
-                   </div>
-             </div>
-            <div class="user-comment-desc p-1 pl-2">
-                <p class="m-0 mr-2">${data.data.user.screen_name}</p>
-            </div>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-lg-11 offset-lg-1">
-        </div>
-      </div>`;
-  replyTweet.insertAdjacentHTML('beforeend',text1);
+let iconLoaded1 = () => {
+  planeIcon.classList.remove("fa-spinner");
+  planeIcon.classList.add("fa-paper-plane");
 }
 
-
-let insertSelectionSub = (data) => {
-  // selectedTweet = data;
-  let date = data.created_at.split(" ");
-  date = date[3];
-  const text1 = `<div class="row comment-box p-1 pt-3 pr-4">
-        <div class="col-lg-2 col-3 user-img text-center">
-          <img src=${data.user.profile_image_url} class="main-cmt-img">
-        </div>
-        <div class="col-lg-10 col-9 user-comment bg-light rounded pb-1">
-             <div class="row">
-                   <div class="col-lg-8 col-6 border-bottom pr-0">
-                      <p class="w-100 p-2 m-0">${data.text}</p>
-                   </div>
-                   <div class="col-lg-4 col-6 border-bottom">
-                      <p class="w-100 p-2 m-0"><span class="float-right"><i class="fa fa-clock-o mr-1" aria-hidden="true"></i>${date}</span></p>
-                   </div>
-             </div>
-            <div class="user-comment-desc p-1 pl-2">
-                <p class="m-0 mr-2">${data.user.screen_name}</p>
-            </div>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-lg-11 offset-lg-1">
-        </div>
-      </div>`;
-  replyTweet.insertAdjacentHTML('beforeend',text1);
+let insertReply = (data) => {
+  console.log(data);
+  let time = data.created_at.split(" ");
+  time = time[3];
+  const text3 = `<table style="width: 90%; margin-bottom: 20px;">
+    <tr>
+      <td style="width: 60px;">
+        <img style="width: 25px; height: 25px; float: right;" src=${data.user.profile_image_url} class="card-img">
+      </td>
+      <td style="padding-left: 20px; font-weight: 500;">
+      ${data.user.name}
+      </td>
+      <td style="float: right; font-weight: 100;">
+        ${time}
+      </td>
+    </tr>
+    <tr>
+      <tr>
+        <td>
+        </td>
+        <td colspan="2" style="padding-left: 20px; font-weight: 500;">
+          ${data.text}
+        </td>
+      </tr>
+    </tr>
+    <tr>
+      <td>
+      </td>
+    </tr>
+  </table>`;
+  chat.insertAdjacentHTML("beforeend",text3);
 }
 
 let test = async () => {
   if(!selectedTweet.data || replyField.value == '') {
     return ;
   }
-  iconLoaderFun();
+  iconLoaded();
   console.log(replyField.value,selectedTweet.data.id,selectedTweet.data.user.screen_name);
   let data = {
     data: replyField.value,
@@ -131,26 +116,82 @@ let test = async () => {
   });
   const resJSON = await result.json();
   console.log(resJSON);
-  insertSelectionSub(resJSON);
-  iconLoaded();
+  insertReply(resJSON);
+  iconLoaded1();
 }
 
 let loaderSelection = () => {
-  const text = `<div style="text-align: center; padding: 30px;">
-    <div class="spinner-border" role="status">
-      <span class="sr-only">Loading...</span>
-    </div>
-  </div>`;
-  replyTweet.insertAdjacentHTML('beforeend', text);
+  const text = `<div class="spinner-border" role="status" style="margin-top: 20px;">
+                  <span class="sr-only">Loading...</span>
+                </div>
+                `;
+  leftProfile.insertAdjacentHTML('beforeend', text);
+  rightProfile.insertAdjacentHTML('beforeend', text);
+}
+
+let insertSelection = (data) => {
+  console.log(data);
+  let time = data.created_at.split(" ");
+  time = time[3];
+  const text1 = `<table style="width:90%; margin-top: 10px;">
+    <tr class = "chat-loader-profile">
+      <td style="text-align: right; font-weight: 100;"><img style="width: 40px; height: 40px;" src=${data.user.profile_image_url} class="card-img"></td>
+      <td style="text-align: center; font-weight: 500;">${data.user.name}</td>
+      <td><span class="dot"></span></td>
+    </tr>
+  </table>`;
+  const text2 = `<img class="profile-image" src="${data.user.profile_image_url}" alt="Smiley face">
+  <p class="profile-name">
+    ${data.user.name}
+  </p>
+  <p class="profile-status">
+    Online
+  </p>
+  <button class="button"><i class="fa fa-phone" aria-hidden="true"></i>Call</button>
+  <button class="button"><i class="fa fa-envelope" aria-hidden="true"></i>Email</button>`;
+
+  const text3 = `<table style="width: 90%; margin-bottom: 20px;">
+    <tr>
+      <td style="width: 60px;">
+        <img style="width: 25px; height: 25px; float: right;" src=${data.user.profile_image_url} class="card-img">
+      </td>
+      <td style="padding-left: 20px; font-weight: 500;">
+      ${data.user.name}
+      </td>
+      <td style="float: right; font-weight: 100;">
+        ${time}
+      </td>
+    </tr>
+    <tr>
+      <tr>
+        <td>
+        </td>
+        <td colspan="2" style="padding-left: 20px; font-weight: 500;">
+          ${data.text}
+        </td>
+      </tr>
+    </tr>
+    <tr>
+      <td>
+      </td>
+    </tr>
+  </table>`;
+  chat.innerHTML = '';
+  leftProfile.innerHTML = '';
+  rightProfile.innerHTML = '';
+  chat.insertAdjacentHTML("beforeend",text3);
+  rightProfile.insertAdjacentHTML("beforeend",text2);
+  leftProfile.insertAdjacentHTML("beforeend",text1);
+
 }
 
 let clearLoader2 = () => {
-  replyTweet.innerHTML = '';
+  chat.innerHTML = '';
+  leftProfile.innerHTML = '';
+  rightProfile.innerHTML = '';
 }
 
 let loadTweet = async (id) => {
-  // console.log(id);
-  // selectedTweet = {} ;
   clearLoader2();
   loaderSelection();
   let data = {
@@ -163,9 +204,9 @@ let loadTweet = async (id) => {
     }
   });
   const resJSON = await result.json();
-  console.log(resJSON);
-  clearLoader2();
-  insertSelection(resJSON);
+  selectedTweet = resJSON;
+  // console.log(resJSON);
+  insertSelection(resJSON.data);
 }
 
 let clicked = (id) => {
@@ -188,35 +229,53 @@ let clearLoader = () => {
 
 const renderList = (items) => {
   items.forEach(ele => {
-    const text = `  <div id=${ele.id_str} class="card mb-3" style="max-width: 450px; max-height: 450px; background-color: #74C2E1;" onclick="clicked(this.id)" >
-      <div class="row no-gutters">
-        <div class="col-md-4">
-          <img style="padding: 20px;" src=${ele.user.profile_image_url} class="card-img" alt="...">
-        </div>
-        <div class="col-md-8">
-          <div class="card-body">
-            <h5 class="card-title">${ele.user.name}</h5>
-            <p class="card-text">${ele.text}</p>
-            <p class="card-text"><small>${ele.created_at}</small></p>
-          </div>
-        </div>
-      </div>
-      </div>`;
+        var date = ele.created_at.split(" ");
+        date = date[0] + " " + date[1] + " " + date[2] + " " + date[3];
+        const text = `<div id=${ele.id_str} class="card mb-3" style="max-width: 450px; max-height: 450px; " onclick="clicked(this.id)" >
+	      <div class="row no-gutters">
+	        <div class="col-md-4">
+	          <img style="padding: 20px;" src="${ele.user.profile_image_url}" class="card-img" alt="...">
+	        </div>
+	        <div class="col-md-8">
+	          <div class="card-body">
+	            <h5 class="card-title">${ele.user.name}</h5>
+	            <p class="card-text">${ele.text}</p>
+	            <p class="card-text"><small>${date}</small></p>
+	          </div>
+	        </div>
+	      </div>
+      </div>`
       insertTweet.insertAdjacentHTML('beforeend', text);
   })
+}
+
+let updateProfiles = (data) => {
+  // console.log("profile",data);
+  const text = `<img style="width: 25px; height: 25px; float: right;" src="${data.photos[0].value}" class="card-img">`;
+  const text1 = `<img style="width: 30px; height: 30px; border-radius:50%;" src=${data.photos[0].value} alt="..." />`
+  panelImage.innerHTML = '';
+  panelImage.insertAdjacentHTML('beforeend',text1);
+  chatBottomLeft.innerHTML = '';
+  chatBottomLeft.insertAdjacentHTML('beforeend', text);
 }
 
 let load = async () => {
   loader();
   let result = await fetch(url+'tweets');
   let res = await result.json();
-
-  console.log(res.statuses);
-  if(res) {
-    socket.emit("recievedUser", {
-      user: res.statuses[0].in_reply_to_screen_name
-    })
+  if(res.statuses.length > 0)
+  {
+    console.log(res);
+    console.log(res.statuses);
+    if(res) {
+      socket.emit("recievedUser", {
+        user: res.statuses[0].in_reply_to_screen_name
+      })
+    }
   }
+  let profile = await fetch(url + "getuser");
+  let resprofile = await profile.json();
+  updateProfiles(resprofile);
   clearLoader();
   renderList(res.statuses);
 }
