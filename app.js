@@ -74,11 +74,10 @@ let searchTweets = async (user) => {
 }
 
 let pro = {} ;
-
 passport.use(new Strategy({
   consumerKey: 'u5h3Mu4EVEOeatsJCdkAWb2ip',
   consumerSecret: 'tnRS7uqqV94EiyJOisxG9lnMYXOL5DzdysuhSsY7p69I6HVKGE',
-  callbackURL: 'http://localhost:3000'
+  callbackURL: 'https://warm-bastion-55542.herokuapp.com/'
 }, (token,tokenSecret,profile,callback) => {
   pro[profile.username] = profile;
   // console.log(profile);

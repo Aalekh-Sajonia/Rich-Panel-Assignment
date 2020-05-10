@@ -13,10 +13,10 @@ const chat = document.querySelector('.chat-data');
 
 let url;
 if(location.protocol === 'https:'){
-  url = 'https://localhost:3000/';
+  url = 'https://warm-bastion-55542.herokuapp.com/';
 
 } else {
-  url = 'http://localhost:3000/';
+  url = 'http://warm-bastion-55542.herokuapp.com/';
 }
 
 let socketInsetTweet = (data) => {
