@@ -22,12 +22,12 @@ io.on('connection', (socket) => {
   // console.log(socket.id);
   socket.on('recievedUser', (data) => {
     // console.log(data);
-    socketList[data.user] = socket.id; //just in case storing the socket ID to user ID
+    socketList[data.user] = socket; //just in case storing the socket ID to user ID
     // console.log(socketList);
-    console.log(T[data.user]);
+    // console.log(T);
     var stream = T[data.user].stream('statuses/filter', { track: '@' + data.user });
     stream.on('tweet',  (tweet) => {
-      console.log(tweet);
+      // console.log(tweet);
       socket.emit("newTweet", tweet);
     })
   })
@@ -140,7 +140,7 @@ app.get('/tweets', async (req,res) => {
 
 app.get('/tweet',async (req,res) => {
   let q = url.parse(req.url,true);
-  // console.log(q.query)
+  console.log(req.user.username);
   activeSelection[req.user.username] = q.query.id;
   let result = await T[req.user.username].get('/statuses/show/' + q.query.id);
   // console.log(result.id,result.in_reply_to_screen_name,);
@@ -148,9 +148,14 @@ app.get('/tweet',async (req,res) => {
   let finalAns = [];
   finalAns.push(result.data);
 
-  console.log(result.data.user.screen_name);
+
   let result1 = await T[req.user.username].get('/search/tweets', {q: '@' + result.data.user.screen_name});
-  // console.log(result1.data.statuses);
+  var stream = T[req.user.username].stream('statuses/filter', { track: '@' + result.data.user.screen_name });
+
+  stream.on('tweet',  (tweet) => {
+    console.log(tweet);
+    socketList[req.user.username].emit("newReply", tweet);
+  });
 
   for(let i = result1.data.statuses.length-1; i>= 0; i--) {
     if(result1.data.statuses[i].in_reply_to_status_id_str === activeSelection[req.user.username])
@@ -158,14 +163,7 @@ app.get('/tweet',async (req,res) => {
         finalAns.push(result1.data.statuses[i]);
      }
   }
-
-  // result1.data.statuses.forEach(ele => {
-  //   if(ele.in_reply_to_status_id_str === activeSelection[req.user.username])
-  //   {
-  //     finalAns.push(ele);
-  //   }
-  // })
-  console.log(finalAns);
+  // console.log(finalAns);
 
   res.send(JSON.stringify(finalAns));
 })

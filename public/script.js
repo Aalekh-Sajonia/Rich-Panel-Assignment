@@ -43,6 +43,38 @@ let socketInsetTweet = (data) => {
     return ;
 }
 
+let insertReply2 = (data) => {
+    let time = data.created_at.split(" ");
+    time = time[3];
+    const text3 = `<table style="width: 90%; margin-bottom: 20px;">
+      <tr>
+        <td style="width: 60px;">
+          <img style="width: 25px; height: 25px; float: right;" src=${data.user.profile_image_url} class="card-img">
+        </td>
+        <td style="padding-left: 20px; font-weight: 500;">
+        ${data.user.name}
+        </td>
+        <td style="float: right; font-weight: 100;">
+          ${time}
+        </td>
+      </tr>
+      <tr>
+        <tr>
+          <td>
+          </td>
+          <td colspan="2" style="padding-left: 20px; font-weight: 500;">
+            ${data.text}
+          </td>
+        </tr>
+      </tr>
+      <tr>
+        <td>
+        </td>
+      </tr>
+    </table>`;
+    chat.insertAdjacentHTML("beforeend",text3);
+}
+
 let socket = io();
 socket.on("connect", () => {
   console.log("connected");
@@ -51,6 +83,11 @@ socket.on('newTweet', (data) => {
   console.log("newtweet got");
   console.log(data);
   socketInsetTweet(data);
+});
+
+socket.on("newReply", (tweet) => {
+  console.log(tweet);
+  insertReply2(tweet);
 });
 
 let selectedTweet = {} ;
@@ -121,7 +158,7 @@ let test = async () => {
   });
   const resJSON = await result.json();
   console.log(resJSON);
-  insertReply(resJSON);
+  // insertReply(resJSON);
   iconLoaded1();
 }
 
