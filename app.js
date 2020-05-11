@@ -12,6 +12,7 @@ var socketIO = require('socket.io');
 var http = require('http');
 
 var T= {};
+var activeSelection = {};
 var socketList = {};
 
 var app = express();
@@ -31,19 +32,6 @@ io.on('connection', (socket) => {
     })
   })
 })
-
-// var T = new Twit({
-//     consumer_key: 'u5h3Mu4EVEOeatsJCdkAWb2ip'
-//   , consumer_secret: 'tnRS7uqqV94EiyJOisxG9lnMYXOL5DzdysuhSsY7p69I6HVKGE'
-//   , access_token: '1258283006793482240-o1mWQfQGAVmgbAKqx8t2VO2QsUVtz0'
-//   , access_token_secret: 'AoLAZco0FVlDMsgyrb4wA0MGzRnZj4g85slt4YqTxsygX'
-// });
-//
-// var stream = T.stream('statuses/filter', { track: '@aalekh_s' })
-//
-// stream.on('tweet', function (tweet) {
-//   // console.log(tweet)
-// })
 
 function reply(status, replyStatusId = null,userName) {
   T.post('statuses/update', {
@@ -77,10 +65,10 @@ let pro = {} ;
 passport.use(new Strategy({
   consumerKey: 'u5h3Mu4EVEOeatsJCdkAWb2ip',
   consumerSecret: 'tnRS7uqqV94EiyJOisxG9lnMYXOL5DzdysuhSsY7p69I6HVKGE',
-  callbackURL: 'https://warm-bastion-55542.herokuapp.com/'
+  callbackURL: 'http://localhost:3000'
 }, (token,tokenSecret,profile,callback) => {
   pro[profile.username] = profile;
-  // console.log(profile);
+  console.log(profile);
   T[profile.username] = new Twit({
       consumer_key: 'u5h3Mu4EVEOeatsJCdkAWb2ip'
     , consumer_secret: 'tnRS7uqqV94EiyJOisxG9lnMYXOL5DzdysuhSsY7p69I6HVKGE'
@@ -88,7 +76,7 @@ passport.use(new Strategy({
     , access_token_secret: tokenSecret
   });
 
-  // console.log(T);
+  console.log(T);
   return callback(null,profile);
 }));
 
@@ -152,14 +140,34 @@ app.get('/tweets', async (req,res) => {
 
 app.get('/tweet',async (req,res) => {
   let q = url.parse(req.url,true);
-  // console.log(q.query);
+  // console.log(q.query)
+  activeSelection[req.user.username] = q.query.id;
   let result = await T[req.user.username].get('/statuses/show/' + q.query.id);
-  if(result) {
-    res.send(JSON.stringify(result));
+  // console.log(result.id,result.in_reply_to_screen_name,);
+  let ans1;
+  let finalAns = [];
+  finalAns.push(result.data);
+
+  console.log(result.data.user.screen_name);
+  let result1 = await T[req.user.username].get('/search/tweets', {q: '@' + result.data.user.screen_name});
+  // console.log(result1.data.statuses);
+
+  for(let i = result1.data.statuses.length-1; i>= 0; i--) {
+    if(result1.data.statuses[i].in_reply_to_status_id_str === activeSelection[req.user.username])
+     {
+        finalAns.push(result1.data.statuses[i]);
+     }
   }
-  else {
-    res.send("error");
-  }
+
+  // result1.data.statuses.forEach(ele => {
+  //   if(ele.in_reply_to_status_id_str === activeSelection[req.user.username])
+  //   {
+  //     finalAns.push(ele);
+  //   }
+  // })
+  console.log(finalAns);
+
+  res.send(JSON.stringify(finalAns));
 })
 
 app.post('/reply', async (req,res) => {
